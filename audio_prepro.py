@@ -24,11 +24,9 @@ mel_spectrogram = T.MelSpectrogram(
     window_fn=torch.hamming_window
 )
 
-
 def resample(source_sr, target_sr):
     resample_transform = T.Resample(source_sr, target_sr)
     return resample_transform
-
 
 def plot_spectrogram(spec, title=None, ylabel='freq_bin', aspect='auto', xmax=None):
     fig, axs = plt.subplots(1, 1)
@@ -43,13 +41,11 @@ def plot_spectrogram(spec, title=None, ylabel='freq_bin', aspect='auto', xmax=No
 
     plt.savefig("spec.png")
 
-
 def pad(tensor, sampe_rate):
     z = torch.zeros(10*sample_rate, dtype=torch.float32)
     z[:tensor.size(0)] = tensor
     z = z + 5*1e-4*torch.rand(z.size(0))
     return z
-
 
 def preprocess_audio(audio="/content/test_file.wav", transform=mel_spectrogram):
     if isinstance(audio, str):
