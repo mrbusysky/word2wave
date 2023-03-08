@@ -39,7 +39,8 @@ class Transpose1dLayer(nn.Module):
 
     def forward(self, x):
         if self.upsample:
-            x = nn.functional.interpolate(x, scale_factor=self.upsample, mode="nearest")
+            x = nn.functional.interpolate(
+                x, scale_factor=self.upsample, mode="nearest")
         return self.transpose_ops(x)
 
 
@@ -116,11 +117,14 @@ class PhaseShuffle(nn.Module):
         # Apply shuffle to each sample
         for k, idxs in k_map.items():
             if k > 0:
-                x_shuffle[idxs] = F.pad(x[idxs][..., :-k], (k, 0), mode="reflect")
+                x_shuffle[idxs] = F.pad(
+                    x[idxs][..., :-k], (k, 0), mode="reflect")
             else:
-                x_shuffle[idxs] = F.pad(x[idxs][..., -k:], (0, -k), mode="reflect")
+                x_shuffle[idxs] = F.pad(
+                    x[idxs][..., -k:], (0, -k), mode="reflect")
 
-        assert x_shuffle.shape == x.shape, "{}, {}".format(x_shuffle.shape, x.shape)
+        assert x_shuffle.shape == x.shape, "{}, {}".format(
+            x_shuffle.shape, x.shape)
         return x_shuffle
 
 
@@ -136,7 +140,8 @@ class WaveGANGenerator(nn.Module):
         use_batch_norm=False,
     ):
         super(WaveGANGenerator, self).__init__()
-        assert slice_len in [16384, 32768, 65536]  # used to predict longer utterances
+        # used to predict longer utterances
+        assert slice_len in [16384, 32768, 65536]
 
         self.ngpus = ngpus
         self.model_size = model_size  # d
@@ -210,7 +215,8 @@ class WaveGANGenerator(nn.Module):
                     upsample=upsample,
                     use_batch_norm=use_batch_norm,
                 ),
-                Transpose1dLayer(model_size, num_channels, 25, 2, upsample=upsample),
+                Transpose1dLayer(model_size, num_channels,
+                                 25, 2, upsample=upsample),
             ]
         elif slice_len == 65536:
             deconv_layers += [
@@ -227,7 +233,8 @@ class WaveGANGenerator(nn.Module):
                 ),
             ]
         else:
-            raise ValueError("slice_len {} value is not supported".format(slice_len))
+            raise ValueError(
+                "slice_len {} value is not supported".format(slice_len))
 
         self.deconv_list = nn.ModuleList(deconv_layers)
         for m in self.modules():
@@ -263,7 +270,8 @@ class WaveGANDiscriminator(nn.Module):
         use_batch_norm=False,
     ):
         super(WaveGANDiscriminator, self).__init__()
-        assert slice_len in [16384, 32768, 65536]  # used to predict longer utterances
+        # used to predict longer utterances
+        assert slice_len in [16384, 32768, 65536]
 
         self.model_size = model_size  # d
         self.ngpus = ngpus

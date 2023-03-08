@@ -1,9 +1,0 @@
-.gitignore
-**venv/
-.vscode
-output*
-**/__pycache__/*
-coala/models/
-**.tar
-/wavegan/
-*.png
