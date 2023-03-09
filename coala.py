@@ -1,7 +1,8 @@
+""" Code from the original COALA implementation: https://github.com/xavierfav/coala."""
+
 import torch
 from torch import nn
 from torch.nn import Sequential, Linear, Dropout, ReLU, Sigmoid, Conv2d, ConvTranspose2d, BatchNorm1d, BatchNorm2d, LeakyReLU
-
 
 class Flatten(nn.Module):
     def forward(self, input):
@@ -17,29 +18,24 @@ class AudioEncoder(nn.Module):
     def __init__(self):
         super(AudioEncoder, self).__init__()
 
-        self.audio_encoder = Sequential(
-            Conv2d(1, 128, kernel_size=4, stride=2,
-                   padding=1, padding_mode='zeros'),
+        self.audio_encoder = Sequential( 
+            Conv2d(1, 128, kernel_size=4, stride=2, padding=1, padding_mode='zeros'),
             BatchNorm2d(128),
             ReLU(),  # 128x48x48
             Dropout(.25),
-            Conv2d(128, 128, kernel_size=4, stride=2,
-                   padding=1, padding_mode='zeros'),
+            Conv2d(128, 128, kernel_size=4, stride=2, padding=1, padding_mode='zeros'),
             BatchNorm2d(128),
             ReLU(),  # 128x24x24
             Dropout(.25),
-            Conv2d(128, 128, kernel_size=4, stride=2,
-                   padding=1, padding_mode='zeros'),
+            Conv2d(128, 128, kernel_size=4, stride=2, padding=1, padding_mode='zeros'),
             BatchNorm2d(128),
             ReLU(),  # 128x12x12
             Dropout(.25),
-            Conv2d(128, 128, kernel_size=4, stride=2,
-                   padding=1, padding_mode='zeros'),
+            Conv2d(128, 128, kernel_size=4, stride=2, padding=1, padding_mode='zeros'),
             BatchNorm2d(128),
             ReLU(),  # 128x6x6
             Dropout(.25),
-            Conv2d(128, 128, kernel_size=4, stride=2,
-                   padding=1, padding_mode='zeros'),
+            Conv2d(128, 128, kernel_size=4, stride=2, padding=1, padding_mode='zeros'),
             BatchNorm2d(128),
             ReLU(),  # 128x3x3
             Dropout(.25),
